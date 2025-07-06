@@ -1,0 +1,54 @@
+@startuml "Shipment Tracker"
+
+interface UserInterface
+
+class TrackerViewHelper {
+    + shipmentId: State<String>
+    + shipmentTotes: State<String[]>
+    + shipmentUpdateHistory: State<String[]>
+    + expectedShipmentDeliveryDate: State<String[]>
+    + shipmentStatus: State<String>
+    All attributes have a private setter
+    in this class
+
+    + trackShipment(id: String)
+    + stopTracking()
+}
+
+UserInterface --> TrackerViewHelper
+note on link: Creates and uses
+    
+note "TrackerViewHelper has the responsibility of preparing data for the using interface to display." as viewHelperNote
+
+TrackerViewHelper -- viewHelperNote
+
+class ShippingUpdate {
+    + previousStatus: String
+    + newStatus: String
+    + timestamp: Long
+}
+
+class Shipment {
+    +status: String
+    +id: String
+    +notes: String[]
+    private set;
+    +updateHistory: ShippingUpdate[]
+    private set;
+    +expectedDeliveryDateTimestamp: Long
+    +currentLocation: String
+    +addNote(note: String)
+    +addUpdate(update: Update)
+}
+
+class TrackingSimulator {
+    - shipments: Shipment[]
+    + findShipment(id: String): Shipment?
+    + addShipment(shipment: Shipment)
+    + runSimulation()
+}
+
+note "TrackingSimulator is a static class that can be accessed anywhere" as tsimnote
+TrackingSimulator -- tsimnote
+
+@enduml

@@ -15,12 +15,17 @@ class TrackerViewHelper {
     + stopTracking()
 }
 
-UserInterface --> TrackerViewHelper
-note on link: Creates and uses
+interface ShipmentObserver {
+    + update(shipment: Shipment)
+}
+
+interface ShipmentObservable {
+    + addObserver(observer: ShipmentObserver)
+    + removeObserver(observer: ShipmentObserver)
+    + notifyObservers()
+}
     
 note "TrackerViewHelper has the responsibility of preparing data for the using interface to display." as viewHelperNote
-
-TrackerViewHelper -- viewHelperNote
 
 class ShippingUpdate {
     + previousStatus: String
@@ -49,6 +54,13 @@ class TrackingSimulator {
 }
 
 note "TrackingSimulator is a static class that can be accessed anywhere" as tsimnote
+
+TrackerViewHelper .u.|> ShipmentObserver
+ShipmentObservable .l.> ShipmentObserver
+Shipment .u.|> ShipmentObservable
+UserInterface --> TrackerViewHelper
+note on link: Creates and uses
+TrackerViewHelper -- viewHelperNote
 TrackingSimulator -- tsimnote
 
 @enduml

@@ -55,6 +55,11 @@ class TrackingSimulator {
 
 note "TrackingSimulator is a static class that can be accessed anywhere" as tsimnote
 
+interface UpdateParseStrategy {
+    + parseUpdate(update: String): ShippingUpdate
+
+}
+
 TrackerViewHelper .u.|> ShipmentObserver
 ShipmentObservable .l.> ShipmentObserver
 Shipment .u.|> ShipmentObservable

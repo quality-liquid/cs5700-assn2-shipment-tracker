@@ -135,6 +135,7 @@ class TrackingSimulator {
     + findShipment(id: String): Shipment?
     + addShipment(shipment: Shipment)
     + runSimulation()
+    + updateFactory(updateString: String)
 }
 
 note "TrackingSimulator is a static class that can be accessed anywhere" as tsimnote

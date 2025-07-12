@@ -27,10 +27,94 @@ interface ShipmentObservable {
     
 note "TrackerViewHelper has the responsibility of preparing data for the using interface to display." as viewHelperNote
 
-class ShippingUpdate {
+abstract class ShippingUpdate {
     + previousStatus: String
     + newStatus: String
     + timestamp: Long
+}
+
+class CreatedUpdate {
+    + previousStatus: String
+    + newStatus: String
+    + timestamp: Long
+}
+
+class ShippedUpdate {
+    + previousStatus: String
+    + newStatus: String
+    + timestamp: Long
+}
+
+class LocationUpdate {
+    + previousStatus: String
+    + newStatus: String
+    + timestamp: Long
+}
+
+class DeliveredUpdate {
+    + previousStatus: String
+    + newStatus: String
+    + timestamp: Long
+}
+
+class DelayedUpdate {
+    + previousStatus: String
+    + newStatus: String
+    + timestamp: Long
+}
+
+class LostUpdate {
+    + previousStatus: String
+    + newStatus: String
+    + timestamp: Long
+}
+
+class CanceledUpdate {
+    + previousStatus: String
+    + newStatus: String
+    + timestamp: Long
+}
+
+class NoteAddedUpdate {
+    + previousStatus: String
+    + newStatus: String
+    + timestamp: Long
+}
+
+interface GetNoteStrategy {
+    + getNote(): String
+}
+
+class NoNoteStrategy {
+    + getNote(): String
+}
+
+class NoteStrategy {
+    + getNote(): String
+}
+
+class LocationStrategy {
+    + getLocation(): String
+}
+
+class NoLocationStrategy {
+    + getLocation(): String
+}
+
+class ExpectedDeliveryDateStrategy {
+    + getExpectedDeliveryDate(): Long
+}
+
+class NoExpectedDeliveryDateStrategy {
+    + getExpectedDeliveryDate(): Long
+}
+
+interface GetLocationStrategy {
+    + getLocation(): String
+}
+
+interface GetExpectedDeliveryDateStrategy {
+    + getExpectedDeliveryDate(): Long
 }
 
 class Shipment {
@@ -55,17 +139,35 @@ class TrackingSimulator {
 
 note "TrackingSimulator is a static class that can be accessed anywhere" as tsimnote
 
-interface UpdateParseStrategy {
-    + parseUpdate(update: String): ShippingUpdate
+ShippingUpdate <|.u. GetNoteStrategy
+ShippingUpdate <|.u. GetLocationStrategy
+ShippingUpdate <|.u. GetExpectedDeliveryDateStrategy
 
-}
+GetNoteStrategy <|-- NoNoteStrategy
+GetNoteStrategy <|-- NoteStrategy
+GetLocationStrategy <|-- LocationStrategy
+GetLocationStrategy <|-- NoLocationStrategy
+GetExpectedDeliveryDateStrategy <|-- ExpectedDeliveryDateStrategy
+GetExpectedDeliveryDateStrategy <|-- NoExpectedDeliveryDateStrategy
 
-TrackerViewHelper .u.|> ShipmentObserver
-ShipmentObservable .l.> ShipmentObserver
-Shipment .u.|> ShipmentObservable
+ShippingUpdate <|-- CreatedUpdate
+ShippingUpdate <|-- ShippedUpdate
+ShippingUpdate <|-- LocationUpdate
+ShippingUpdate <|-- DeliveredUpdate
+ShippingUpdate <|-- DelayedUpdate
+ShippingUpdate <|-- LostUpdate
+ShippingUpdate <|-- CanceledUpdate
+ShippingUpdate <|-- NoteAddedUpdate
+
+TrackerViewHelper ..|> ShipmentObserver
+ShipmentObservable ..> ShipmentObserver
+Shipment ..|> ShipmentObservable
 UserInterface --> TrackerViewHelper
 note on link: Creates and uses
 TrackerViewHelper -- viewHelperNote
 TrackingSimulator -- tsimnote
+
+Shipment --o TrackingSimulator
+ShippingUpdate --* Shipment
 
 @enduml
